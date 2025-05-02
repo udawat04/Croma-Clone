@@ -1,6 +1,6 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
-// import { jwtDecode } from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useState } from "react";
@@ -8,7 +8,7 @@ import { useAuth } from "../Services/AuthContext";
 
 const LoginPage = () => {
    const navigate = useNavigate();
-   const {  loginWithCredentials } = useAuth();
+   const {  loginWithCredentials,loginWithGoogleAuth } = useAuth();
    const [email, setEmail] = useState("");
    const [password, setPassword] = useState("");
 
@@ -62,20 +62,23 @@ const LoginPage = () => {
      }
    };
 
-  //  const handleGoogleLogin = async (credentialResponse) => {
-  //    try {
-  //      const decoded = jwtDecode(credentialResponse.credential);
-  //      await loginWithGoogleAuth(decoded);
-  //      navigate("/admin");
-  //      window.location.reload();
-  //    } catch (error) {
-  //      console.error("Login failed:", error);
-  //    }
-  //  };
+   const handleGoogleLogin = async (credentialResponse) => {
+     try {
+       const decoded = jwtDecode(credentialResponse.credential);
+       await loginWithGoogleAuth(decoded);
+       navigate("/home");
+       window.location.reload();
+     } catch (error) {
+       console.error("Login failed:", error);
+     }
+   };
   return (
     <div>
       <section className="min-h-screen flex items-center justify-center bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+          <div className="flex justify-center mb-4">
+            <img src="https://www.croma.com/assets/favicon.ico" className="w-12" alt="" />
+          </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
             Login to Your Account
           </h2>
@@ -131,7 +134,7 @@ const LoginPage = () => {
               <hr className="flex-1 border-gray-600" />
             </div>
 
-            {/* Google Login
+            {/* Google Login */}
             <div className="flex justify-center">
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
@@ -144,7 +147,7 @@ const LoginPage = () => {
                 shape="rectangular"
                 width="300"
               />
-            </div> */}
+            </div>
           </form>
           <p className="mt-4 text-sm text-center text-gray-600">
             Don't have an account?{" "}

@@ -6,11 +6,11 @@ const ProtectedRoutes = () => {
 
   // If no user found, redirect to the login page
   if (!user) {
-    return <Navigate to="/" />;
+    return <Navigate to="/" replace />;
   }
 
   // If user is found, show the protected page
-  return <Outlet />;
+  return <Outlet  />;
 }
 
 export default ProtectedRoutes

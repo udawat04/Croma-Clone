@@ -1,14 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate(); // Hook to programmatically navigate
+  const handleLogout = () => {
+    localStorage.removeItem("UserData"); // Remove user data
+    localStorage.removeItem("cartProductIds"); // Remove user data
+    navigate("/"); // Redirect to login page
+    window.location.reload(); // Refresh the page
+  };
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to={"/"} className="text-2xl font-bold text-indigo-600">
+            <Link to={"/home"} className="text-2xl font-bold text-indigo-600">
               CromaX
             </Link>
           </div>
@@ -22,14 +29,14 @@ const Navbar = () => {
           </div>
           {/* Right Icons */}
           <div className="flex items-center space-x-6">
-            <a
-              href="#"
+            <button
+              onClick={handleLogout}
               className="text-gray-700 hover:text-indigo-600 font-medium text-sm hidden md:inline"
             >
-              Login
-            </a>
-            <a
-              href="#"
+              Logout
+            </button>
+            <Link
+              to={"/checkout"}
               className="text-gray-700 hover:text-indigo-600 relative"
             >
               <svg
@@ -45,7 +52,7 @@ const Navbar = () => {
                 <circle cx={9} cy={21} r={1} />
                 <circle cx={20} cy={21} r={1} />
               </svg>
-            </a>
+            </Link>
           </div>
         </div>
         {/* Bottom Categories */}
