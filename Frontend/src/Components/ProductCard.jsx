@@ -87,7 +87,7 @@ const ProductCard = (props) => {
 
   return (
     <div className="w-[250px] bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300 mb-8">
-      <Link to="/product">
+      <Link to={`/product/${props.id}`}>
         <img
           className="w-full h-48 object-contain"
           src={props.image}

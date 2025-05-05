@@ -60,18 +60,18 @@ const Navbar = () => {
           <Link to={"/mobile"} className="hover:text-indigo-600">
             Mobiles
           </Link>
-          <a href="#" className="hover:text-indigo-600">
+          <Link to={"/laptop"} className="hover:text-indigo-600">
             Laptops
-          </a>
-          <a href="#" className="hover:text-indigo-600">
+          </Link>
+          <Link to={"/tv"} className="hover:text-indigo-600">
             TVs
-          </a>
-          <a href="#" className="hover:text-indigo-600">
+          </Link>
+          <Link to={"/appliances"} className="hover:text-indigo-600">
             Appliances
-          </a>
-          <a href="#" className="hover:text-indigo-600">
+          </Link>
+          <Link to={"/accessories"} className="hover:text-indigo-600">
             Accessories
-          </a>
+          </Link>
         </div>
       </div>
     </nav>

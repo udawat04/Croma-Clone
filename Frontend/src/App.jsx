@@ -20,6 +20,12 @@ import MainLayout from "./Layout/MainLayout";
 import ProtectedRoutes from "./Services/ProtectedRoutes";
 import TitleManager from "./Services/TitleManager";
 
+import ScrollToTop from "./Services/LocationPath"; 
+import LaptopPage from "./Pages/LaptopPage";
+import TvPage from "./Pages/TvPage";
+import AppliancePage from "./Pages/AppliancePage";
+import AccessoriesPage from "./Pages/AccessoriesPage";
+
 // ✅ Component to manage and update page title dynamically
 
 
@@ -34,6 +40,7 @@ const App = () => {
   return (
     <div>
       <BrowserRouter>
+        <ScrollToTop />
         <TitleManager /> {/* ✅ Dynamic Title Updater */}
         <ProductProvider>
           <Routes>
@@ -47,9 +54,13 @@ const App = () => {
               <Route element={<MainLayout />}>
                 <Route path="/home" element={<HomePage />} />
                 <Route path="/checkout" element={<AddToCart />} />
-                <Route path="/product" element={<ProductDescription />} />
+                <Route path="/product/:id" element={<ProductDescription />} />
                 <Route path="/returns" element={<ReturnPage />} />
                 <Route path="/mobile" element={<MobilesPage />} />
+                <Route path="/laptop" element={<LaptopPage />} />
+                <Route path="/tv" element={<TvPage />} />
+                <Route path="/appliances" element={<AppliancePage />} />
+                <Route path="/accessories" element={<AccessoriesPage />} />
                 <Route path="/wishlist" element={<WishlistPage />} />
                 <Route path="/trackorder" element={<OrderTrackingPage />} />
                 <Route path="/contact" element={<ContactPage />} />

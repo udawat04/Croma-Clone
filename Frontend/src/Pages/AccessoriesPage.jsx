@@ -3,15 +3,15 @@ import Cards from "../Components/Cards";
 import FilterSidebar from "../Components/FilterSidebar";
 import { useProduct } from "../Services/ProductContextApi";
 
-const MobilePage = () => {
+const AccessoriesPage = () => {
   const { products } = useProduct();
-  const productType = "Mobile";
+  const productType = "Accessory";
 
   const [filters, setFilters] = useState({
     price: [],
     brand: [],
-    ram: [],
-    storage: [],
+    accessoryType: [],
+    connectivity: [],
   });
 
   const handleFilterChange = (group, values) => {
@@ -21,18 +21,25 @@ const MobilePage = () => {
     }));
   };
 
+  // Apply filters
   const applyFilters = (products) => {
     return products.filter((product) => {
       if (product.type.toLowerCase() !== productType.toLowerCase())
         return false;
 
-      const { price, brand, ram, storage } = filters;
+      const { price, brand, accessoryType, connectivity } = filters;
 
       const productPrice = product.newPrice;
       const productBrand = product.brandName?.toLowerCase();
-      const productRam = product.ram?.toLowerCase();
-      const productStorage = product.storage?.toLowerCase();
+      const productAccessoryType = product.accessoryType?.toLowerCase();
+      const productConnectivity = product.connectivity?.toLowerCase();
 
+      // Log the filters and product fields for debugging
+      console.log("Filters:", filters);
+      console.log("Product Accessory Type:", productAccessoryType);
+      console.log("Product Connectivity:", productConnectivity);
+
+      // Price filter
       if (
         price.length &&
         !price.some((range) => {
@@ -48,9 +55,26 @@ const MobilePage = () => {
         return false;
       }
 
+      // Brand filter
       if (brand.length && !brand.includes(productBrand)) return false;
-      if (ram.length && !ram.includes(productRam)) return false;
-      if (storage.length && !storage.includes(productStorage)) return false;
+
+      // Accessory Type filter
+      if (
+        accessoryType.length &&
+        !accessoryType.some(
+          (type) => type.toLowerCase() === productAccessoryType
+        )
+      ) {
+        return false;
+      }
+
+      // Connectivity filter
+      if (
+        connectivity.length &&
+        !connectivity.some((conn) => conn.toLowerCase() === productConnectivity)
+      ) {
+        return false;
+      }
 
       return true;
     });
@@ -64,7 +88,7 @@ const MobilePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex justify-center mb-8">
             <h1 className="text-3xl font-bold text-gray-800 border-b-2 pb-2 border-indigo-600 capitalize">
-              📱 Explore Our Latest Mobile Products
+              🧰 Explore Our Latest Accessories
             </h1>
           </div>
 
@@ -72,7 +96,7 @@ const MobilePage = () => {
             <FilterSidebar
               filters={filters}
               onFilterChange={handleFilterChange}
-              pageType="mobile"
+              pageType="accessory"
             />
 
             <div className="flex-1">
@@ -83,7 +107,7 @@ const MobilePage = () => {
                   ))
                 ) : (
                   <p className="text-gray-600 text-center w-full">
-                    No mobile products available.
+                    No accessory products available.
                   </p>
                 )}
               </div>
@@ -95,4 +119,4 @@ const MobilePage = () => {
   );
 };
 
-export default MobilePage;
+export default AccessoriesPage;

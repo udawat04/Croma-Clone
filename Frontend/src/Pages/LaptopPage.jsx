@@ -3,9 +3,9 @@ import Cards from "../Components/Cards";
 import FilterSidebar from "../Components/FilterSidebar";
 import { useProduct } from "../Services/ProductContextApi";
 
-const MobilePage = () => {
+const LaptopPage = () => {
   const { products } = useProduct();
-  const productType = "Mobile";
+  const productType = "Laptop";
 
   const [filters, setFilters] = useState({
     price: [],
@@ -64,7 +64,7 @@ const MobilePage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-6">
           <div className="flex justify-center mb-8">
             <h1 className="text-3xl font-bold text-gray-800 border-b-2 pb-2 border-indigo-600 capitalize">
-              📱 Explore Our Latest Mobile Products
+              💻 Explore Our Latest Laptops
             </h1>
           </div>
 
@@ -72,7 +72,7 @@ const MobilePage = () => {
             <FilterSidebar
               filters={filters}
               onFilterChange={handleFilterChange}
-              pageType="mobile"
+              pageType="laptop"
             />
 
             <div className="flex-1">
@@ -83,7 +83,7 @@ const MobilePage = () => {
                   ))
                 ) : (
                   <p className="text-gray-600 text-center w-full">
-                    No mobile products available.
+                    No laptop products available.
                   </p>
                 )}
               </div>
@@ -95,4 +95,4 @@ const MobilePage = () => {
   );
 };
 
-export default MobilePage;
+export default LaptopPage;
