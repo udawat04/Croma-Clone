@@ -12,15 +12,11 @@ const AddToCart = () => {
   const user = JSON.parse(localStorage.getItem("UserData"));
   const userId = user?._id;
 
-  // Fetch cart items once
   useEffect(() => {
     const fetchCartItems = async () => {
       try {
         const res = await fetch(`http://localhost:4000/user/${userId}`);
         const data = await res.json();
-
-        console.log("Fetched user data:", data);
-
         const cart = data.cart || [];
         setCartItems(cart);
       } catch (err) {
@@ -31,7 +27,6 @@ const AddToCart = () => {
     if (userId) fetchCartItems();
   }, [userId]);
 
-  // Recalculate totals when cartItems change
   useEffect(() => {
     if (cartItems.length === 0) return;
 
@@ -39,13 +34,12 @@ const AddToCart = () => {
       (sum, item) => sum + item.product.price * item.quantity,
       0
     );
-    const tax = Math.round(subtotal * 0.18); // 18% tax
+    const tax = Math.round(subtotal * 0.18);
     const total = subtotal + tax + 99;
 
     setTotals({ subtotal, shipping: 99, tax, total });
   }, [cartItems]);
 
-  // Handle quantity change
   const handleQuantityChange = async (productId, delta) => {
     const updatedCart = cartItems.map((item) => {
       if (item.product._id === productId) {
@@ -64,7 +58,6 @@ const AddToCart = () => {
     });
   };
 
-  // Handle remove
   const handleRemove = async (productId) => {
     try {
       const res = await fetch(
@@ -81,7 +74,6 @@ const AddToCart = () => {
         );
         setCartItems(updatedCart);
 
-        // Update localStorage cartProductIds
         const cartProductIds =
           JSON.parse(localStorage.getItem("cartProductIds")) || [];
         const newCartIds = cartProductIds.filter((id) => id !== productId);
@@ -96,6 +88,49 @@ const AddToCart = () => {
     }
   };
 
+  // 🔄 Razorpay Handler
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handleCheckout = async () => {
+    const res = await loadRazorpayScript();
+    if (!res) {
+      alert("Razorpay SDK failed to load.");
+      return;
+    }
+
+    const options = {
+      key: "rzp_test_g23zoZABdAtdtx", // ⚠️ Replace with your test key
+      amount: totals.total * 100,
+      currency: "INR",
+      name: "ARTISAN Checkout",
+      description: "Test Transaction",
+      handler: function (response) {
+        alert(
+          "Payment successful! Payment ID: " + response.razorpay_payment_id
+        );
+      },
+      prefill: {
+        name: user?.name || "Test User",
+        email: user?.email || "test@example.com",
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#6366f1",
+      },
+    };
+
+    const paymentObject = new window.Razorpay(options);
+    paymentObject.open();
+  };
+
   return (
     <section className="bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-6">
@@ -103,7 +138,6 @@ const AddToCart = () => {
           Your Shopping Cart
         </h2>
 
-        {/* Cart Items */}
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
         ) : (
@@ -162,7 +196,6 @@ const AddToCart = () => {
           ))
         )}
 
-        {/* Order Summary */}
         {cartItems.length > 0 && (
           <div className="bg-white shadow rounded-lg p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">
@@ -184,7 +217,10 @@ const AddToCart = () => {
               <span>Total</span>
               <span>₹{totals.total}</span>
             </div>
-            <button className="mt-6 w-full cursor-pointer bg-indigo-600 text-white py-3 rounded-lg text-sm font-medium hover:bg-indigo-700 transition">
+            <button
+              onClick={handleCheckout}
+              className="mt-6 w-full cursor-pointer bg-indigo-600 text-white py-3 rounded-lg text-sm font-medium hover:bg-indigo-700 transition"
+            >
               Proceed to Checkout
             </button>
           </div>
