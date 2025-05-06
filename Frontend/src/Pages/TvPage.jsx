@@ -24,50 +24,49 @@ const TvPage = () => {
   };
 
   // Apply filters to products
-  const applyFilters = (products) => {
-    return products.filter((product) => {
-      // Ensure product is of the correct type (TV)
-      if (product.type.toLowerCase() !== productType.toLowerCase())
-        return false;
+const applyFilters = (products) => {
+  return products.filter((product) => {
+    if (product.type.toLowerCase() !== productType.toLowerCase()) return false;
 
-      const { price, brand, displaySize, resolution } = filters;
+    const { price, brand, displaySize, resolution } = filters;
 
-      // Product details
-      const productPrice = product.newPrice;
-      const productBrand = product.brandName?.toLowerCase();
-      const productDisplaySize = product.displaySize?.toLowerCase();
-      const productResolution = product.resolution?.toLowerCase();
+    const productPrice = product.newPrice;
+    const productBrand = product.brandName?.toLowerCase();
+    const productDisplaySize = product.displaySize?.toLowerCase();
+    const productResolution = product.resolution?.toLowerCase();
 
-      // Filter by price range
-      if (
-        price.length &&
-        !price.some((range) => {
-          if (range === "Under ₹10,000") return productPrice < 10000;
-          if (range === "₹10,000 - ₹20,000")
-            return productPrice >= 10000 && productPrice <= 20000;
-          if (range === "₹20,000 - ₹30,000")
-            return productPrice >= 20000 && productPrice <= 30000;
-          if (range === "Above ₹30,000") return productPrice > 30000;
-          return true;
-        })
-      ) {
-        return false;
-      }
+    if (
+      price.length &&
+      !price.some((range) => {
+        if (range === "Under ₹10,000") return productPrice < 10000;
+        if (range === "₹10,000 - ₹20,000")
+          return productPrice >= 10000 && productPrice <= 20000;
+        if (range === "₹20,000 - ₹30,000")
+          return productPrice >= 20000 && productPrice <= 30000;
+        if (range === "Above ₹30,000") return productPrice > 30000;
+        return true;
+      })
+    ) {
+      return false;
+    }
 
-      // Filter by brand
-      if (brand.length && !brand.includes(productBrand)) return false;
+    if (brand.length && !brand.some((b) => b.toLowerCase() === productBrand))
+      return false;
+    if (
+      displaySize.length &&
+      !displaySize.some((d) => d.toLowerCase() === productDisplaySize)
+    )
+      return false;
+    if (
+      resolution.length &&
+      !resolution.some((r) => r.toLowerCase() === productResolution)
+    )
+      return false;
 
-      // Filter by display size (only if displaySize filter has values)
-      if (displaySize.length && !displaySize.includes(productDisplaySize))
-        return false;
+    return true;
+  });
+};
 
-      // Filter by resolution (only if resolution filter has values)
-      if (resolution.length && !resolution.includes(productResolution))
-        return false;
-
-      return true;
-    });
-  };
 
   const filteredProducts = applyFilters(products);
 

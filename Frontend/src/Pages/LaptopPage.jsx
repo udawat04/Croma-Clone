@@ -21,40 +21,46 @@ const LaptopPage = () => {
     }));
   };
 
-  const applyFilters = (products) => {
-    return products.filter((product) => {
-      if (product.type.toLowerCase() !== productType.toLowerCase())
-        return false;
+ const applyFilters = (products) => {
+   return products.filter((product) => {
+     if (product.type.toLowerCase() !== productType.toLowerCase()) return false;
 
-      const { price, brand, ram, storage } = filters;
+     const { price, brand, ram, storage } = filters;
 
-      const productPrice = product.newPrice;
-      const productBrand = product.brandName?.toLowerCase();
-      const productRam = product.ram?.toLowerCase();
-      const productStorage = product.storage?.toLowerCase();
+     const productPrice = product.newPrice;
+     const productBrand = product.brandName?.toLowerCase();
+     const productRam = product.ram?.toLowerCase();
+     const productStorage = product.storage?.toLowerCase();
 
-      if (
-        price.length &&
-        !price.some((range) => {
-          if (range === "Under ₹10,000") return productPrice < 10000;
-          if (range === "₹10,000 - ₹20,000")
-            return productPrice >= 10000 && productPrice <= 20000;
-          if (range === "₹20,000 - ₹30,000")
-            return productPrice >= 20000 && productPrice <= 30000;
-          if (range === "Above ₹30,000") return productPrice > 30000;
-          return true;
-        })
-      ) {
-        return false;
-      }
+     if (
+       price.length &&
+       !price.some((range) => {
+         if (range === "Under ₹10,000") return productPrice < 10000;
+         if (range === "₹10,000 - ₹20,000")
+           return productPrice >= 10000 && productPrice <= 20000;
+         if (range === "₹20,000 - ₹30,000")
+           return productPrice >= 20000 && productPrice <= 30000;
+         if (range === "Above ₹30,000") return productPrice > 30000;
+         return true;
+       })
+     ) {
+       return false;
+     }
 
-      if (brand.length && !brand.includes(productBrand)) return false;
-      if (ram.length && !ram.includes(productRam)) return false;
-      if (storage.length && !storage.includes(productStorage)) return false;
+     if (brand.length && !brand.some((b) => b.toLowerCase() === productBrand))
+       return false;
+     if (ram.length && !ram.some((r) => r.toLowerCase() === productRam))
+       return false;
+     if (
+       storage.length &&
+       !storage.some((s) => s.toLowerCase() === productStorage)
+     )
+       return false;
 
-      return true;
-    });
-  };
+     return true;
+   });
+ };
+
 
   const filteredProducts = applyFilters(products);
 
